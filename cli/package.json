@@ -1,0 +1,42 @@
+{
+  "name": "memecub",
+  "version": "0.1.0",
+  "description": "Find memes and 表情包 and place them into articles — CLI for memecub.com",
+  "type": "module",
+  "bin": {
+    "memecub": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "meme",
+    "emoji",
+    "reaction",
+    "mcp",
+    "agent",
+    "claude",
+    "\u8868\u60c5\u5305"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "default": "./dist/client.js"
+    }
+  },
+  "types": "./dist/client.d.ts",
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.9.3"
+  }
+}

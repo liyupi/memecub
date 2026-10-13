@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.memecub/memecub",
+  "title": "memecub",
+  "description": "Find memes and Chinese 表情包, and auto-place reaction images into articles, with license info.",
+  "version": "0.1.0",
+  "websiteUrl": "https://memecub.com/developers",
+  "icons": [
+    {
+      "src": "https://memecub.com/icon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://memecub.com/mcp"
+    }
+  ]
+}
