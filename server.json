@@ -3,8 +3,13 @@
   "name": "com.memecub/memecub",
   "title": "memecub",
   "description": "Find memes and Chinese 表情包, and auto-place reaction images into articles, with license info.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "websiteUrl": "https://memecub.com/developers",
+  "repository": {
+    "url": "https://github.com/liyupi/memecub",
+    "source": "github",
+    "id": "1416728757"
+  },
   "icons": [
     {
       "src": "https://memecub.com/icon.svg",
