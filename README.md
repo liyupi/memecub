@@ -1,5 +1,7 @@
 # memecub
 
+<img src="assets/logo.png" alt="memecub" width="96" align="right">
+
 Memes, Chinese 表情包 and reaction images for AI agents and writers. Search by feeling (`facepalm`, `无语`, `摸鱼`), or hand over a whole article and get it back with memes placed where they fit. Every result says whether it is cleared for commercial use and comes with a ready Markdown snippet, including the credit line when the license needs one.
 
 Website: [memecub.com](https://memecub.com) · Docs: [memecub.com/developers](https://memecub.com/developers)
@@ -44,6 +46,12 @@ claude mcp add --transport http memecub https://memecub.com/mcp
 ## Agent skill
 
 [`skills/memecub/SKILL.md`](skills/memecub/SKILL.md) teaches an agent how to place memes into a piece of writing using plain `curl`, no MCP needed:
+
+```bash
+npx skills add liyupi/memecub
+```
+
+Or by hand for Claude Code:
 
 ```bash
 mkdir -p ~/.claude/skills/memecub
