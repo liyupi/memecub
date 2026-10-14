@@ -6,7 +6,7 @@
 
 **Meme search and automatic meme placement for AI agents.**
 
-Give Claude Code, Cursor, Codex or Claude Desktop a meme library. Search reaction memes by feeling,<br>or hand over an article and get it back with the right meme after the right sentence.
+Give Claude Code, Cursor, Codex or Claude Desktop a meme library. Search reaction memes by feeling, or hand over an article and get it back with the right meme after the right sentence.
 
 English · [简体中文](README.zh-CN.md)
 

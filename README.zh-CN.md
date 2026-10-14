@@ -6,7 +6,7 @@
 
 **给 AI Agent 用的表情包搜索和自动配图工具。**
 
-让 Claude Code、Cursor、Codex、Claude Desktop 拥有一个表情包图库：按情绪搜梗图，<br>或者把整篇文章丢给它，返回在合适的句子后面配好表情包的成稿。
+让 Claude Code、Cursor、Codex、Claude Desktop 拥有一个表情包图库：按情绪搜梗图，或者把整篇文章丢给它，返回在合适的句子后面配好表情包的成稿。
 
 [English](README.md) · 简体中文
 
