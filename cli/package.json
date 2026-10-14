@@ -1,7 +1,7 @@
 {
   "name": "memecub",
   "version": "0.1.0",
-  "description": "Find memes and 表情包 and place them into articles — CLI for memecub.com",
+  "description": "Meme search and automatic meme placement for AI agents and writers: find reaction memes, GIFs and Chinese 表情包 by feeling and insert them into articles. CLI and JS client for memecub.com.",
   "type": "module",
   "bin": {
     "memecub": "dist/cli.js"
@@ -11,22 +11,38 @@
     "README.md"
   ],
   "license": "MIT",
+  "homepage": "https://memecub.com/developers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liyupi/memecub.git",
+    "directory": "cli"
+  },
+  "bugs": "https://github.com/liyupi/memecub/issues",
+  "author": "Cyber Koi Limited (https://memecub.com)",
   "engines": {
     "node": ">=18"
   },
   "keywords": [
     "meme",
-    "emoji",
-    "reaction",
+    "memes",
+    "meme-search",
+    "reaction-images",
+    "gif",
     "mcp",
-    "agent",
-    "claude",
-    "\u8868\u60c5\u5305"
+    "ai-agent",
+    "agent-skills",
+    "claude-code",
+    "cursor",
+    "codex",
+    "cli",
+    "\u8868\u60c5\u5305",
+    "\u6597\u56fe"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "tsc -p tsconfig.json"
   },
   "exports": {
     ".": {

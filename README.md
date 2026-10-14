@@ -14,6 +14,7 @@ English · [简体中文](README.zh-CN.md)
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.memecub%2Fmemecub-1d1c1a?style=flat-square)](https://registry.modelcontextprotocol.io/v0/servers?search=com.memecub/memecub)
 [![Smithery](https://img.shields.io/badge/Smithery-memecub-1d1c1a?style=flat-square)](https://smithery.ai/servers/memecub/memecub)
 [![Remote MCP](https://img.shields.io/badge/remote_MCP-Streamable_HTTP-1d1c1a?style=flat-square)](#quick-start)
+[![npm](https://img.shields.io/npm/v/memecub?style=flat-square&color=1d1c1a)](https://www.npmjs.com/package/memecub)
 [![License: MIT](https://img.shields.io/badge/code-MIT-1d1c1a?style=flat-square)](LICENSE)
 
 </div>
@@ -115,10 +116,11 @@ All endpoints and limits: [memecub.com/developers](https://memecub.com/developer
 
 ## CLI and JS client
 
-Source in [`cli/`](cli). Node 18+.
+[`memecub` on npm](https://www.npmjs.com/package/memecub), source in [`cli/`](cli). Node 18+.
 
 ```bash
-cd cli && npm install && npm run build && npm link
+npx memecub search "facepalm" --limit 5
+npm i -g memecub                                  # or install the `memecub` command
 memecub search "facepalm" --limit 5
 memecub search "mind blown" --commercial          # only images cleared for commercial use
 memecub match ./article.md --count 4 > article.with-memes.md

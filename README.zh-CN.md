@@ -14,6 +14,7 @@
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.memecub%2Fmemecub-1d1c1a?style=flat-square)](https://registry.modelcontextprotocol.io/v0/servers?search=com.memecub/memecub)
 [![Smithery](https://img.shields.io/badge/Smithery-memecub-1d1c1a?style=flat-square)](https://smithery.ai/servers/memecub/memecub)
 [![远程 MCP](https://img.shields.io/badge/远程_MCP-Streamable_HTTP-1d1c1a?style=flat-square)](#快速开始)
+[![npm](https://img.shields.io/npm/v/memecub?style=flat-square&color=1d1c1a)](https://www.npmjs.com/package/memecub)
 [![License: MIT](https://img.shields.io/badge/code-MIT-1d1c1a?style=flat-square)](LICENSE)
 
 </div>
@@ -102,10 +103,11 @@ curl -sG https://memecub.com/api/v1/search --data-urlencode "q=无语" -d limit=
 
 ## 命令行和 JS 客户端
 
-源码在 [`cli/`](cli)，需要 Node 18 以上。
+已发布到 [npm](https://www.npmjs.com/package/memecub)，源码在 [`cli/`](cli)，需要 Node 18 以上。
 
 ```bash
-cd cli && npm install && npm run build && npm link
+npx memecub search "无语" --kind meme
+npm i -g memecub                                  # 或者全局安装 memecub 命令
 memecub search "无语" --kind meme
 memecub search "mind blown" --commercial          # 只要可商用的图
 memecub match ./article.md --count 4 > article.with-memes.md
