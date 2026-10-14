@@ -3,10 +3,11 @@
 Find memes, 表情包 and reaction images and place them into your writing. Classic memes collected from the web are marked `commercial_use: false`; openly licensed emoji, art and photos are marked `commercial_use: true` with their license and a ready credit line. Every result has a Markdown snippet.
 
 ```bash
-npx memecub search "facepalm" --limit 5
-npx memecub search "无语" --kind meme --json
-npx memecub search "mind blown" --commercial      # only images cleared for commercial use
-npx memecub match ./article.md --count 4 > article.with-memes.md
+npm install && npm run build && npm link   # from this directory, Node 18+
+memecub search "facepalm" --limit 5
+memecub search "无语" --kind meme --json
+memecub search "mind blown" --commercial      # only images cleared for commercial use
+memecub match ./article.md --count 4 > article.with-memes.md
 ```
 
 Memes whose captions contain swearing are hidden unless you pass `--profanity`.
