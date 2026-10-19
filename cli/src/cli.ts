@@ -1,11 +1,17 @@
 #!/usr/bin/env node
+import { spawn } from "node:child_process";
 import { readFile } from "node:fs/promises";
+import { hostname } from "node:os";
 import { parseArgs } from "node:util";
-import { MemecubClient, type Meme } from "./client.js";
+import { ApiError, MemecubClient, type Meme } from "./client.js";
+import { clearConfig, configPath, loadConfig, saveConfig } from "./config.js";
 
 const HELP = `memecub — memes and 表情包 for your writing
 
 Usage
+  memecub login [--no-browser] [--print]   sign in through the browser; the key is saved for later commands
+  memecub whoami                           plan and credits left
+  memecub logout                           revoke this machine's key and forget it
   memecub search <query> [--limit 10] [--kind meme|gif|emoji|artwork|photo|upload] [--min-size 150]
                          [--commercial] [--no-credit] [--private] [--profanity] [--json]
   memecub get <id> [--json]
@@ -17,8 +23,12 @@ Usage
   --profanity    also return memes whose captions contain swearing (hidden by default)
   --min-size     skip images smaller than this many pixels on either side
 
+Credits
+  search costs 1 credit, match costs 10; a free account gets 1,000 credits a month.
+  Without signing in you get 20 searches a day. Plans and packs: https://memecub.com/pricing
+
 Environment
-  MEMECUB_API_KEY   API key from https://memecub.com/library#keys (private library, higher limits)
+  MEMECUB_API_KEY   API key (overrides the one saved by \`memecub login\`); keys: https://memecub.com/dashboard?tab=keys
   MEMECUB_API_URL   defaults to https://memecub.com
 `;
 
@@ -35,12 +45,64 @@ const { values, positionals } = parseArgs({
     private: { type: "boolean", default: false },
     profanity: { type: "boolean", default: false },
     json: { type: "boolean", default: false },
+    "no-browser": { type: "boolean", default: false },
+    print: { type: "boolean", default: false },
+    force: { type: "boolean", default: false },
     help: { type: "boolean", short: "h", default: false },
   },
 });
 
 const [cmd, ...rest] = positionals;
-const client = new MemecubClient();
+const stored = await loadConfig();
+const apiUrl = process.env.MEMECUB_API_URL || stored.apiUrl || "https://memecub.com";
+const client = new MemecubClient(apiUrl, process.env.MEMECUB_API_KEY || stored.apiKey);
+
+function openBrowser(url: string): void {
+  const [bin, args] =
+    process.platform === "darwin" ? ["open", [url]] : process.platform === "win32" ? ["cmd", ["/c", "start", "", url]] : ["xdg-open", [url]];
+  try {
+    spawn(bin, args as string[], { stdio: "ignore", detached: true }).on("error", () => undefined).unref();
+  } catch {
+    // The URL is printed too, so a missing opener is fine.
+  }
+}
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function login() {
+  if (stored.apiKey && !values.force) {
+    const who = await new MemecubClient(apiUrl, stored.apiKey).account().catch(() => undefined);
+    if (who) {
+      if (values.print) return void console.log(stored.apiKey);
+      console.log(`Already signed in as ${who.data.email}. Run \`memecub logout\` first, or pass --force.`);
+      return;
+    }
+  }
+  const anon = new MemecubClient(apiUrl, undefined);
+  const start = await anon.startLogin(hostname());
+  console.error(`\nOpen this page and confirm the code ${start.user_code}:\n  ${start.verification_uri_complete}\n`);
+  if (!values["no-browser"]) openBrowser(start.verification_uri_complete);
+  console.error("Waiting for you to approve in the browser…");
+  let interval = Math.max(start.interval, 1) * 1000;
+  const deadline = Date.now() + start.expires_in * 1000;
+  while (Date.now() < deadline) {
+    await sleep(interval);
+    const r = await anon.pollLogin(start.device_code);
+    if (r.api_key) {
+      await saveConfig({ apiKey: r.api_key, email: r.email, ...(apiUrl !== "https://memecub.com" ? { apiUrl } : {}) });
+      const who = await new MemecubClient(apiUrl, r.api_key).account().catch(() => undefined);
+      console.error(`Signed in as ${r.email}.${who ? ` ${who.data.credits.remaining.toLocaleString("en-US")} credits left (${who.data.plan}).` : ""}`);
+      console.error(`Key saved to ${configPath()}`);
+      if (values.print) console.log(r.api_key);
+      return;
+    }
+    if (r.error === "slow_down") interval += 2000;
+    else if (r.error === "access_denied") throw new Error("login was denied in the browser");
+    else if (r.error === "expired_token" || r.error === "invalid_grant") break;
+    else if (r.error !== "authorization_pending") throw new Error(`login failed (${r.error ?? "unknown error"})`);
+  }
+  throw new Error("login timed out; run `memecub login` again");
+}
 
 function line(m: Meme): string {
   if (m.private) {
@@ -71,6 +133,26 @@ async function main() {
   if (values.help || !cmd) return void process.stdout.write(HELP);
 
   switch (cmd) {
+    case "login":
+      return login();
+    case "logout": {
+      if (stored.apiKey) await new MemecubClient(apiUrl, stored.apiKey).revokeCurrentKey().catch(() => undefined);
+      await clearConfig();
+      console.log(stored.apiKey ? "Signed out; this machine's key was revoked." : "Not signed in.");
+      if (process.env.MEMECUB_API_KEY) console.log("Note: MEMECUB_API_KEY is still set in your environment.");
+      return;
+    }
+    case "whoami":
+    case "status": {
+      if (!client.apiKey) return void console.log("Not signed in. Run `memecub login` (20 keyless searches a day until then).");
+      const { data: a } = await client.account();
+      if (values.json) return void console.log(JSON.stringify(a, null, 2));
+      const c = a.credits;
+      console.log(`${a.email} · ${a.plan}${a.subscription?.cancel_at_period_end ? " (cancels at period end)" : ""}`);
+      console.log(`credits: ${c.remaining.toLocaleString("en-US")} left (${c.monthly_remaining.toLocaleString("en-US")} of ${c.monthly_allowance.toLocaleString("en-US")} monthly, resets ${c.resets_at.slice(0, 10)}; ${c.purchased.toLocaleString("en-US")} purchased)`);
+      console.log(`rate limit: ${a.rate_limit_per_minute}/min · search ${a.costs.search} credit · match ${a.costs.match} credits`);
+      return;
+    }
     case "search": {
       const q = rest.join(" ").trim();
       if (!q) throw new Error("search needs a query");
@@ -129,5 +211,6 @@ async function main() {
 
 main().catch((err: Error) => {
   console.error(`memecub: ${err.message}`);
+  if (err instanceof ApiError && err.status === 429 && !client.apiKey) console.error("Sign in for more: memecub login");
   process.exitCode = 1;
 });

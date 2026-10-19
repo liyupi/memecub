@@ -75,7 +75,7 @@ claude mcp add --transport http memecub https://memecub.com/mcp
 | `get_meme` | 单张图的完整信息：许可证、来源、作者、署名、标签 |
 | `list_categories` | 图库分类 |
 
-搜索不需要 Key。加上 `Authorization: Bearer <key>`（免费，在 [memecub.com/zh/library](https://memecub.com/zh/library#keys) 创建）可以提高每日额度、使用私人图库和 `match_article`。
+不带 Key 可以试用（每个 IP 每天 20 次搜索）。加上 `Authorization: Bearer <key>`（运行 `npx memecub login`，或在 [memecub.com/zh/dashboard](https://memecub.com/zh/dashboard?tab=keys) 创建）就按额度计费：免费账号每月送 1,000 额度，搜索 1 额度一次，`match_article` 10 额度一篇。套餐和额度包见 [memecub.com/zh/pricing](https://memecub.com/zh/pricing)。
 
 ## Agent Skill
 
@@ -130,7 +130,7 @@ Agent 能用的表情包，在 [memecub.com/zh](https://memecub.com/zh) 上都�
 
 ## 常见问题
 
-**收费吗？** 免费。不需要 Key 就能搜索；免费创建的 Key 能提高每日额度，并能用 `match_article`。
+**收费吗？** 网站免费用，轻度调用接口也免费：不带 Key 每天 20 次搜索，注册后每月送 1,000 额度。用量大可以订阅套餐或买额度包，见[价格页](https://memecub.com/zh/pricing)。
 
 **图片能商用吗？** 看每张图的 `license.commercial_use`。网络收集的表情包是 `false`，版权归原作者，保留来源链接；开放许可的图（CC0、公有领域、CC BY 等）是 `true`，需要署名时附带署名。MCP 传 `commercial_only: true`、REST 传 `commercial=1`，就只返回可商用的图。
 

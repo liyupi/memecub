@@ -75,7 +75,7 @@ Then just ask:
 | `get_meme` | Full details for one image: license, source, author, credit line, tags |
 | `list_categories` | Library categories |
 
-Searching needs no key. Add `Authorization: Bearer <key>` (free, create one at [memecub.com/library](https://memecub.com/library#keys)) for higher daily limits, your private library and `match_article`.
+You can try it without a key (20 searches a day per IP). Add `Authorization: Bearer <key>` (run `npx memecub login`, or create one at [memecub.com/dashboard](https://memecub.com/dashboard?tab=keys)) to use your credits: a free account gets 1,000 a month, a search costs 1 and `match_article` costs 10. Plans and credit packs: [memecub.com/pricing](https://memecub.com/pricing).
 
 ## Agent skill
 
@@ -143,7 +143,7 @@ Everything the agent sees is also browsable at [memecub.com](https://memecub.com
 
 ## FAQ
 
-**Is it free?** Yes. Without a key you can search; a free key raises the daily limits and unlocks `match_article`.
+**Is it free?** Browsing memecub.com is free, and so is light API use: 20 keyless searches a day, or 1,000 credits a month with a free account. Heavier use runs on [plans and credit packs](https://memecub.com/pricing).
 
 **Can I use the images commercially?** Check `license.commercial_use` on each result. Memes collected from the web are `false`: copyright belongs to their creators and the source link is kept. Openly licensed images (CC0, public domain, CC BY and similar) are `true` and come with the credit line when the license needs one. Pass `commercial_only: true` (MCP) or `commercial=1` (REST) to get only those.
 

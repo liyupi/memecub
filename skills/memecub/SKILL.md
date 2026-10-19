@@ -14,7 +14,7 @@ Each result has a `markdown` field that already contains the credit line when on
 
 ## How to call it
 
-Everything goes through one HTTPS endpoint; `curl` is enough. No key is needed for searching (120 searches/day per IP). If the user has a key (`MEMECUB_API_KEY`, from https://memecub.com/library#keys), send it to get 300 searches/day and their private library:
+Everything goes through one HTTPS endpoint; `curl` is enough. No key is needed to try it (20 searches a day per IP). With a key (`MEMECUB_API_KEY`) each search costs 1 credit from the user's balance (a free account gets 1,000 credits a month) and also covers their private library. The user can get a key with `npx memecub login --print` or at https://memecub.com/dashboard?tab=keys:
 
 ```bash
 curl -sG https://memecub.com/api/v1/search \
@@ -61,7 +61,7 @@ curl -s -X POST https://memecub.com/api/v1/match \
   -d '{"text": "<the article, JSON-escaped>", "count": 4, "commercial": false}'
 ```
 
-The response has `data.markdown` (the article with memes inserted) and `data.slots` (each spot, the chosen meme, alternatives, and `placed: false` if the sentence could not be found). It uses the user's daily quota (5 articles/day free; failed runs are not counted).
+The response has `data.markdown` (the article with memes inserted) and `data.slots` (each spot, the chosen meme, alternatives, and `placed: false` if the sentence could not be found). It costs 10 credits per article (failed runs are refunded). Doing the reading yourself and calling search per spot costs 1 credit each, so prefer that.
 
 ## Finding a single meme
 
@@ -74,3 +74,4 @@ For "find me a meme for X": search 2–3 phrasings, show the top 3–5 as Markdo
 - If the user says the piece is commercial and you used any `commercial_use: false` image, say so once in your report and offer `commercial=1` alternatives.
 - Images marked `private: true` belong to the user's private library: the user declared they have rights to them. Remind the user once if such an image's declared license is non-commercial (e.g. `cc-by-nc-sa`) and the article looks commercial.
 - If results are thin, say so and try other phrasings; memecub fetches more images for that query in the background, so retrying in a minute can help.
+- On HTTP 429 without a key, the keyless daily limit is used up: tell the user to run `npx memecub login --print` (or create a key at https://memecub.com/dashboard?tab=keys) and set `MEMECUB_API_KEY`. On HTTP 402 the user's credits ran out: point them to https://memecub.com/pricing. Do not retry in a loop.

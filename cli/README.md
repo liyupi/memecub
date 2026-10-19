@@ -13,7 +13,7 @@ memecub match ./article.md --count 4 > article.with-memes.md
 
 Memes whose captions contain swearing are hidden unless you pass `--profanity`.
 
-Set `MEMECUB_API_KEY` (create one at https://memecub.com/library#keys) to search your private library and get higher daily limits.
+Run `npx memecub login` to sign in through the browser (the key is saved to `~/.config/memecub/config.json`), or set `MEMECUB_API_KEY` (create one at https://memecub.com/dashboard?tab=keys). Without signing in you get 20 searches a day; a free account gets 1,000 credits a month (search 1, match 10). `memecub whoami` shows what is left; plans at https://memecub.com/pricing.
 
 ## As a library
 

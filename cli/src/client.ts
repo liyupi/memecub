@@ -31,7 +31,31 @@ export interface SearchParams {
   minSize?: number;
 }
 
+export interface Account {
+  email: string;
+  name: string;
+  plan: string;
+  credits: { remaining: number; monthly_remaining: number; monthly_allowance: number; purchased: number; resets_at: string };
+  costs: Record<string, number>;
+  rate_limit_per_minute: number;
+  private_library_limit: number;
+  subscription: { status: string; interval: string; cancel_at_period_end: boolean } | null;
+}
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status: number,
+    readonly code?: string,
+  ) {
+    super(message);
+  }
+}
+
 export class MemecubClient {
+  /** Credits left after the last billed call, from the `x-credits-remaining` header. */
+  creditsRemaining?: number;
+
   constructor(
     readonly baseUrl = process.env.MEMECUB_API_URL ?? "https://memecub.com",
     readonly apiKey = process.env.MEMECUB_API_KEY,
@@ -42,13 +66,16 @@ export class MemecubClient {
       ...init,
       headers: {
         accept: "application/json",
+        "user-agent": "memecub-cli",
         ...(this.apiKey ? { authorization: `Bearer ${this.apiKey}` } : {}),
         ...(init.body ? { "content-type": "application/json" } : {}),
         ...init.headers,
       },
     });
-    const data = (await res.json().catch(() => ({}))) as { error?: { message?: string } };
-    if (!res.ok) throw new Error(data.error?.message ?? `HTTP ${res.status}`);
+    const left = res.headers.get("x-credits-remaining");
+    if (left !== null) this.creditsRemaining = Number(left);
+    const data = (await res.json().catch(() => ({}))) as { error?: { message?: string; code?: string } };
+    if (!res.ok) throw new ApiError(data.error?.message ?? `HTTP ${res.status}`, res.status, data.error?.code);
     return data as T;
   }
 
@@ -91,5 +118,34 @@ export class MemecubClient {
 
   categories() {
     return this.request<{ data: { slug: string; name: string; name_zh: string; count: number }[] }>("/api/v1/categories");
+  }
+
+  account() {
+    return this.request<{ data: Account }>("/api/v1/account");
+  }
+
+  revokeCurrentKey() {
+    return this.request<{ ok: boolean }>("/api/v1/account", { method: "DELETE" });
+  }
+
+  startLogin(clientName: string) {
+    return this.request<{
+      device_code: string;
+      user_code: string;
+      verification_uri: string;
+      verification_uri_complete: string;
+      expires_in: number;
+      interval: number;
+    }>("/api/cli/auth/device", { method: "POST", body: JSON.stringify({ client_name: clientName }) });
+  }
+
+  /** One RFC 8628 poll; `error` is authorization_pending, slow_down, expired_token or access_denied. */
+  async pollLogin(deviceCode: string): Promise<{ api_key?: string; email?: string; error?: string }> {
+    const res = await fetch(`${this.baseUrl.replace(/\/+$/, "")}/api/cli/auth/token`, {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json", "user-agent": "memecub-cli" },
+      body: JSON.stringify({ device_code: deviceCode }),
+    });
+    return (await res.json().catch(() => ({ error: `http_${res.status}` }))) as { api_key?: string; email?: string; error?: string };
   }
 }
