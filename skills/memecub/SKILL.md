@@ -5,7 +5,7 @@ description: Find memes, 表情包 / 斗图 and reaction images and place them i
 
 # memecub: memes for writing
 
-memecub covers trending memes: Chinese 表情包 / 斗图 (熊猫头, 奶龙, 蘑菇头, 金馆长, 吗喽…), English reaction memes and templates (Drake, This Is Fine, Doge…), plus openly licensed emoji and art.
+memecub covers trending memes: Chinese 表情包 / 斗图 (熊猫头, 奶龙, 金馆长, 吗喽…), English reaction memes and templates (Drake, This Is Fine, Doge…), plus openly licensed emoji and art.
 
 - Memes collected from the web: `license.commercial_use: false`.
 - Openly licensed images: `license.commercial_use: true`, with `attribution` (a ready credit line) when `license.attribution_required` is true.
@@ -61,7 +61,7 @@ curl -s -X POST https://memecub.com/api/v1/match \
   -d '{"text": "<the article, JSON-escaped>", "count": 4, "commercial": false}'
 ```
 
-The response has `data.markdown` (the article with memes inserted) and `data.slots` (each spot, the chosen meme, alternatives, and `placed: false` if the sentence could not be found). It costs 10 credits per article (failed runs are refunded). Doing the reading yourself and calling search per spot costs 1 credit each, so prefer that.
+The response has `data.markdown` (the article with memes inserted) and `data.slots` (each spot, the chosen meme, alternatives, and `placed: false` if the sentence could not be found). It costs 20 credits per image actually placed (spots it could not fill and failed runs are not charged). Doing the reading yourself and calling search per spot costs 1 credit each, so prefer that.
 
 ## Finding a single meme
 

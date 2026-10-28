@@ -27,7 +27,7 @@
 
 - **不只是搜图，还会配图。** `match_article` 读完整篇文章，挑出值得配表情包的句子，直接返回插好图的成稿，Agent 不用自己猜该放在哪。
 - **按情绪搜。** 搜「无语」「裂开」「摸鱼」「打工人」或者 `facepalm`、`this is fine`，拿到的是你想表达的那个反应，而不是字面相近的图。
-- **中文表情包和英文梗图在同一个库里。** 熊猫头、奶龙、蘑菇头、金馆长、吗喽、DeepSeek 鲸鱼娘，和 Drake、This Is Fine、Doge、Surprised Pikachu 都能搜到。中文按整个词匹配，搜角色名就出这个角色。
+- **中文表情包和英文梗图在同一个库里。** 熊猫头、奶龙、金馆长、吗喽、DeepSeek 鲸鱼娘，和 Drake、This Is Fine、Doge、Surprised Pikachu 都能搜到。中文按整个词匹配，搜角色名就出这个角色。
 - **零安装。** 远程 MCP（Streamable HTTP），或者只用 curl 的 Agent Skill。搜索不需要 Key。
 - **每张图都标清能不能商用。** 结果里注明是否可商用、附来源链接，并给出现成的 Markdown，需要署名的已带好署名。要求只用可商用的图，就只返回可商用的。
 - **对 Agent 默认安全。** 配文含脏话的表情包默认不会出现在 Agent 的结果里，需要时再打开。
@@ -75,7 +75,7 @@ claude mcp add --transport http memecub https://memecub.com/mcp
 | `get_meme` | 单张图的完整信息：许可证、来源、作者、署名、标签 |
 | `list_categories` | 图库分类 |
 
-不带 Key 可以试用（每个 IP 每天 20 次搜索）。加上 `Authorization: Bearer <key>`（运行 `npx memecub login`，或在 [memecub.com/zh/dashboard](https://memecub.com/zh/dashboard?tab=keys) 创建）就按额度计费：免费账号每月送 1,000 额度，搜索 1 额度一次，`match_article` 10 额度一篇。套餐和额度包见 [memecub.com/zh/pricing](https://memecub.com/zh/pricing)。
+不带 Key 可以试用（每个 IP 每天 20 次搜索）。加上 `Authorization: Bearer <key>`（运行 `npx memecub login`，或在 [memecub.com/zh/dashboard](https://memecub.com/zh/dashboard?tab=keys) 创建）就按额度计费：免费账号每月送 1,000 额度，搜索 1 额度一次，`match_article` 每放一张图 20 额度。套餐和额度包见 [memecub.com/zh/pricing](https://memecub.com/zh/pricing)。
 
 ## Agent Skill
 
@@ -126,7 +126,7 @@ Agent 能用的表情包，在 [memecub.com/zh](https://memecub.com/zh) 上都�
 
 | 首页 | 话题页 | Agent 接入 |
 |---|---|---|
-| [![memecub 首页](assets/home-zh.png)](https://memecub.com/zh) | [![蘑菇头表情包话题页](assets/topic-zh.png)](https://memecub.com/zh/tag/%E8%98%91%E8%8F%87%E5%A4%B4) | [![AI Agent 接入教程](assets/developers-zh.png)](https://memecub.com/zh/developers) |
+| [![memecub 首页](assets/home-zh.png)](https://memecub.com/zh) | [![表情包话题页](assets/topic-zh.png)](https://memecub.com/zh/tag/%E7%86%8A%E7%8C%AB%E5%A4%B4) | [![AI Agent 接入教程](assets/developers-zh.png)](https://memecub.com/zh/developers) |
 
 ## 常见问题
 

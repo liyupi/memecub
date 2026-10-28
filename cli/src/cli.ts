@@ -24,7 +24,7 @@ Usage
   --min-size     skip images smaller than this many pixels on either side
 
 Credits
-  search costs 1 credit, match costs 10; a free account gets 1,000 credits a month.
+  search costs 1 credit, match costs 20 per image placed; a free account gets 1,000 credits a month.
   Without signing in you get 20 searches a day. Plans and packs: https://memecub.com/pricing
 
 Environment
@@ -150,7 +150,7 @@ async function main() {
       const c = a.credits;
       console.log(`${a.email} · ${a.plan}${a.subscription?.cancel_at_period_end ? " (cancels at period end)" : ""}`);
       console.log(`credits: ${c.remaining.toLocaleString("en-US")} left (${c.monthly_remaining.toLocaleString("en-US")} of ${c.monthly_allowance.toLocaleString("en-US")} monthly, resets ${c.resets_at.slice(0, 10)}; ${c.purchased.toLocaleString("en-US")} purchased)`);
-      console.log(`rate limit: ${a.rate_limit_per_minute}/min · search ${a.costs.search} credit · match ${a.costs.match} credits`);
+      console.log(`rate limit: ${a.rate_limit_per_minute}/min · search ${a.costs.search} credit · match ${a.costs.match} credits per ${a.costs.match_unit ?? "image"}`);
       return;
     }
     case "search": {

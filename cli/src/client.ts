@@ -36,7 +36,7 @@ export interface Account {
   name: string;
   plan: string;
   credits: { remaining: number; monthly_remaining: number; monthly_allowance: number; purchased: number; resets_at: string };
-  costs: Record<string, number>;
+  costs: { search: number; match: number; match_unit?: "article" | "image"; match_per_image_from?: string };
   rate_limit_per_minute: number;
   private_library_limit: number;
   subscription: { status: string; interval: string; cancel_at_period_end: boolean } | null;

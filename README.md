@@ -27,7 +27,7 @@ English · [简体中文](README.zh-CN.md)
 
 - **It places memes, not just finds them.** `match_article` reads a whole post, picks the sentences worth a meme and returns the article with images inserted. Your agent doesn't have to guess where they go.
 - **Search by feeling.** Ask for `facepalm`, `this is fine`, `it works on my machine`, `无语` or `摸鱼` and get the reaction you meant, not a keyword lookalike.
-- **English memes and Chinese 表情包 in one library.** Drake, This Is Fine, Doge and Surprised Pikachu next to 熊猫头, 奶龙, 蘑菇头, 金馆长 and DeepSeek 鲸鱼娘. Chinese queries match whole phrases, so a character name returns that character.
+- **English memes and Chinese 表情包 in one library.** Drake, This Is Fine, Doge and Surprised Pikachu next to 熊猫头, 奶龙, 金馆长, 吗喽 and DeepSeek 鲸鱼娘. Chinese queries match whole phrases, so a character name returns that character.
 - **Zero install.** A remote MCP server over Streamable HTTP, or a plain-curl Agent Skill. Searching works without a key.
 - **License-aware results.** Every image says whether it is cleared for commercial use, links its source, and ships a ready Markdown snippet with the credit line when one is required. Ask for commercial-safe only and that's all you get.
 - **Safe defaults for agents.** Memes whose captions contain swearing are left out of agent results unless you ask for them.
@@ -75,7 +75,7 @@ Then just ask:
 | `get_meme` | Full details for one image: license, source, author, credit line, tags |
 | `list_categories` | Library categories |
 
-You can try it without a key (20 searches a day per IP). Add `Authorization: Bearer <key>` (run `npx memecub login`, or create one at [memecub.com/dashboard](https://memecub.com/dashboard?tab=keys)) to use your credits: a free account gets 1,000 a month, a search costs 1 and `match_article` costs 10. Plans and credit packs: [memecub.com/pricing](https://memecub.com/pricing).
+You can try it without a key (20 searches a day per IP). Add `Authorization: Bearer <key>` (run `npx memecub login`, or create one at [memecub.com/dashboard](https://memecub.com/dashboard?tab=keys)) to use your credits: a free account gets 1,000 a month, a search costs 1 and `match_article` costs 20 per image it places. Plans and credit packs: [memecub.com/pricing](https://memecub.com/pricing).
 
 ## Agent skill
 

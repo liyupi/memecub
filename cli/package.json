@@ -1,6 +1,6 @@
 {
   "name": "memecub",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Meme search and automatic meme placement for AI agents and writers: find reaction memes, GIFs and Chinese 表情包 by feeling and insert them into articles. CLI and JS client for memecub.com.",
   "type": "module",
   "bin": {
@@ -35,8 +35,8 @@
     "cursor",
     "codex",
     "cli",
-    "\u8868\u60c5\u5305",
-    "\u6597\u56fe"
+    "表情包",
+    "斗图"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
