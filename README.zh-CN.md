@@ -34,12 +34,30 @@
 
 ## 快速开始
 
-服务地址是 `https://memecub.com/mcp`，按你用的客户端选一种：
+**一行命令，40 多款 Agent 通用。** 给 Claude Code、Codex、Cursor、Gemini CLI、GitHub Copilot、OpenClaw、Trae、Windsurf 等支持 [Agent Skill](#agent-skill) 的工具装上 memecub：
+
+```bash
+npx skills add https://memecub.com
+```
+
+想用 MCP 的话，服务地址是 `https://memecub.com/mcp`（Streamable HTTP），按你用的客户端选一种：
 
 **Claude Code**
 
 ```bash
 claude mcp add --transport http memecub https://memecub.com/mcp
+```
+
+**Codex**
+
+```bash
+codex mcp add memecub --url https://memecub.com/mcp
+```
+
+**Gemini CLI**
+
+```bash
+gemini mcp add --transport http memecub https://memecub.com/mcp
 ```
 
 **Cursor**（`~/.cursor/mcp.json`）
@@ -54,9 +72,11 @@ claude mcp add --transport http memecub https://memecub.com/mcp
 { "servers": { "memecub": { "type": "http", "url": "https://memecub.com/mcp" } } }
 ```
 
-**Claude Desktop / claude.ai**：设置 → Connectors → Add custom connector → `https://memecub.com/mcp`
+**Claude Desktop / claude.ai**：设置 → 连接器（Connectors）→ 添加自定义连接器 → `https://memecub.com/mcp`
 
-**Codex** 以及其他支持 Skill 的 Agent：用下面的 [Agent Skill](#agent-skill)。
+**ChatGPT**：设置 → 应用与连接器 → 高级设置，打开开发者模式，再创建连接器，地址填 `https://memecub.com/mcp`
+
+Cherry Studio、Dify、n8n 等支持远程 MCP 的客户端同理。每款工具的图文教程见 [memecub.com/zh/developers](https://memecub.com/zh/developers)。
 
 装好之后直接说：
 
@@ -79,11 +99,15 @@ claude mcp add --transport http memecub https://memecub.com/mcp
 
 ## Agent Skill
 
-[`skills/memecub/SKILL.md`](skills/memecub/SKILL.md) 教 Agent 只用 `curl` 给文章配表情包，不需要 MCP，也不用装任何依赖，Claude Code、Codex、Cursor 都能用。
+[`skills/memecub/SKILL.md`](skills/memecub/SKILL.md) 教 Agent 只用 `curl` 给文章配表情包，不需要 MCP，也不用装任何依赖。
 
 ```bash
-npx skills add liyupi/memecub
+npx skills add https://memecub.com                  # 运行后选择要装给哪些 Agent
+npx skills add https://memecub.com -g -a claude-code  # 或者只装给一个：codex、cursor、gemini-cli、openclaw…
+npx skills add liyupi/memecub                       # 同一个 Skill，从本仓库安装
 ```
+
+memecub.com 在 [`/.well-known/agent-skills/index.json`](https://memecub.com/.well-known/agent-skills/index.json) 发布了这个 Skill，所以直接写网址就能装。
 
 或者手动安装：
 

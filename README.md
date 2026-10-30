@@ -34,12 +34,30 @@ English · [简体中文](README.zh-CN.md)
 
 ## Quick start
 
-The server is `https://memecub.com/mcp`. Pick your client:
+**One command, 40+ agents.** Installs the memecub skill into Claude Code, Codex, Cursor, Gemini CLI, GitHub Copilot, OpenClaw, Trae, Windsurf and any other agent that loads [Agent Skills](#agent-skill):
+
+```bash
+npx skills add https://memecub.com
+```
+
+Prefer MCP? The server is `https://memecub.com/mcp` (Streamable HTTP). Pick your client:
 
 **Claude Code**
 
 ```bash
 claude mcp add --transport http memecub https://memecub.com/mcp
+```
+
+**Codex**
+
+```bash
+codex mcp add memecub --url https://memecub.com/mcp
+```
+
+**Gemini CLI**
+
+```bash
+gemini mcp add --transport http memecub https://memecub.com/mcp
 ```
 
 **Cursor** (`~/.cursor/mcp.json`)
@@ -56,7 +74,9 @@ claude mcp add --transport http memecub https://memecub.com/mcp
 
 **Claude Desktop / claude.ai**: Settings → Connectors → Add custom connector → `https://memecub.com/mcp`
 
-**Codex** and any agent that reads skills: use the [Agent Skill](#agent-skill) below.
+**ChatGPT**: Settings → Apps & Connectors → Advanced → turn on developer mode, then create a connector with `https://memecub.com/mcp`
+
+Cherry Studio, Dify, n8n and other clients that take a remote MCP server work the same way. Step-by-step guides for each tool: [memecub.com/developers](https://memecub.com/developers).
 
 Then just ask:
 
@@ -79,11 +99,15 @@ You can try it without a key (20 searches a day per IP). Add `Authorization: Bea
 
 ## Agent skill
 
-[`skills/memecub/SKILL.md`](skills/memecub/SKILL.md) teaches an agent to place memes into writing with plain `curl`. No MCP, no dependencies, works in Claude Code, Codex and Cursor.
+[`skills/memecub/SKILL.md`](skills/memecub/SKILL.md) teaches an agent to place memes into writing with plain `curl`. No MCP, no dependencies.
 
 ```bash
-npx skills add liyupi/memecub
+npx skills add https://memecub.com                  # pick your agents interactively
+npx skills add https://memecub.com -g -a claude-code  # or target one: codex, cursor, gemini-cli, openclaw…
+npx skills add liyupi/memecub                       # same skill, from this repo
 ```
+
+memecub.com publishes the skill at [`/.well-known/agent-skills/index.json`](https://memecub.com/.well-known/agent-skills/index.json), so the site URL is enough.
 
 Or by hand:
 
