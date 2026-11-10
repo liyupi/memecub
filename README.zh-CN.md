@@ -92,10 +92,11 @@ Cherry Studio、Dify、n8n 等支持远程 MCP 的客户端同理。每款工具
 |---|---|
 | `search_memes` | 按情绪、反应或角色搜。可筛选：`commercial_only` 只要可商用、`no_credit` 不需要署名、`kind`（meme、gif、emoji、artwork、photo）、`min_size` 最小尺寸 |
 | `match_article` | 读一篇文章，挑出适合配图的位置，返回插好表情包的文章（需要 Key） |
+| `generate_meme` | AI 做表情包：按配文、画面描述或图库里某张图的角色画一张新的（需要 Key） |
 | `get_meme` | 单张图的完整信息：许可证、来源、作者、署名、标签 |
 | `list_categories` | 图库分类 |
 
-不带 Key 可以试用（每个 IP 每天 20 次搜索）。加上 `Authorization: Bearer <key>`（运行 `npx memecub login`，或在 [memecub.com/zh/dashboard](https://memecub.com/zh/dashboard?tab=keys) 创建）就按额度计费：免费账号每月送 1,000 额度，搜索 1 额度一次，`match_article` 每放一张图 20 额度。套餐和额度包见 [memecub.com/zh/pricing](https://memecub.com/zh/pricing)。
+不带 Key 可以试用（每个 IP 每天 20 次搜索）。加上 `Authorization: Bearer <key>`（运行 `npx memecub login`，或在 [memecub.com/zh/dashboard](https://memecub.com/zh/dashboard?tab=keys) 创建）就按额度计费：免费账号每月送 1,000 额度，搜索 1 额度一次，`match_article` 每放一张图 20 额度，`generate_meme` 每张 500 额度（失败退回）。套餐和额度包见 [memecub.com/zh/pricing](https://memecub.com/zh/pricing)。
 
 ## Agent Skill
 
@@ -135,6 +136,7 @@ npm i -g memecub                                  # 或者全局安装 memecub �
 memecub search "无语" --kind meme
 memecub search "mind blown" --commercial          # 只要可商用的图
 memecub match ./article.md --count 4 > article.with-memes.md
+memecub generate "下班了" --action "熊猫头背着包狂奔出公司" --style panda --out meme.jpg
 ```
 
 ```ts

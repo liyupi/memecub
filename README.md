@@ -92,10 +92,11 @@ Then just ask:
 |---|---|
 | `search_memes` | Search by reaction, feeling or character. Filters: `commercial_only`, `no_credit`, `kind` (meme, gif, emoji, artwork, photo), `min_size` |
 | `match_article` | Read an article, pick the spots that deserve a meme, return the article with images inserted (needs a key) |
+| `generate_meme` | Draw a custom meme with AI from a caption, a description or an existing meme's character (needs a key) |
 | `get_meme` | Full details for one image: license, source, author, credit line, tags |
 | `list_categories` | Library categories |
 
-You can try it without a key (20 searches a day per IP). Add `Authorization: Bearer <key>` (run `npx memecub login`, or create one at [memecub.com/dashboard](https://memecub.com/dashboard?tab=keys)) to use your credits: a free account gets 1,000 a month, a search costs 1 and `match_article` costs 20 per image it places. Plans and credit packs: [memecub.com/pricing](https://memecub.com/pricing).
+You can try it without a key (20 searches a day per IP). Add `Authorization: Bearer <key>` (run `npx memecub login`, or create one at [memecub.com/dashboard](https://memecub.com/dashboard?tab=keys)) to use your credits: a free account gets 1,000 a month, a search costs 1, `match_article` costs 20 per image it places and `generate_meme` costs 500 per image (refunded if it fails). Plans and credit packs: [memecub.com/pricing](https://memecub.com/pricing).
 
 ## Agent skill
 
@@ -148,6 +149,7 @@ npm i -g memecub                                  # or install the `memecub` com
 memecub search "facepalm" --limit 5
 memecub search "mind blown" --commercial          # only images cleared for commercial use
 memecub match ./article.md --count 4 > article.with-memes.md
+memecub generate "Works on my machine" --action "a cat shrugging at a burning server" --out meme.jpg
 ```
 
 ```ts

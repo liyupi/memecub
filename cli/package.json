@@ -1,7 +1,7 @@
 {
   "name": "memecub",
-  "version": "0.2.1",
-  "description": "Meme search and automatic meme placement for AI agents and writers: find reaction memes, GIFs and Chinese 表情包 by feeling and insert them into articles. CLI and JS client for memecub.com.",
+  "version": "0.3.0",
+  "description": "Meme search, automatic meme placement and AI meme generation for AI agents and writers: find reaction memes, GIFs and Chinese 表情包 by feeling, insert them into articles, or draw a custom one. CLI and JS client for memecub.com.",
   "type": "module",
   "bin": {
     "memecub": "dist/cli.js"

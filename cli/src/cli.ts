@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { spawn } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readFile, stat, writeFile } from "node:fs/promises";
 import { hostname } from "node:os";
+import { extname } from "node:path";
 import { parseArgs } from "node:util";
 import { ApiError, MemecubClient, type Meme } from "./client.js";
 import { clearConfig, configPath, loadConfig, saveConfig } from "./config.js";
@@ -16,6 +17,8 @@ Usage
                          [--commercial] [--no-credit] [--private] [--profanity] [--json]
   memecub get <id> [--json]
   memecub match <file|-> [--count 4] [--commercial] [--no-credit] [--profanity] [--json]   print the article with memes inserted
+  memecub generate [caption] [--action "what happens in the picture"] [--style panda|photo|3d|anime|sticker]
+                   [--ref <meme id | image file>] [--locale en|zh] [--out file.jpg] [--json]   draw a new meme with AI
   memecub categories [--json]
 
   --commercial   only images cleared for commercial use (web-collected memes are not)
@@ -24,7 +27,8 @@ Usage
   --min-size     skip images smaller than this many pixels on either side
 
 Credits
-  search costs 1 credit, match costs 20 per image placed; a free account gets 1,000 credits a month.
+  search costs 1 credit, match costs 20 per image placed, generate costs 500 per image (refunded if it fails);
+  a free account gets 1,000 credits a month. Generated images go to your private library.
   Without signing in you get 20 searches a day. Plans and packs: https://memecub.com/pricing
 
 Environment
@@ -40,6 +44,11 @@ const { values, positionals } = parseArgs({
     "min-size": { type: "string" },
     kind: { type: "string" },
     category: { type: "string" },
+    action: { type: "string" },
+    style: { type: "string" },
+    ref: { type: "string" },
+    locale: { type: "string" },
+    out: { type: "string" },
     "no-credit": { type: "boolean", default: false },
     commercial: { type: "boolean", default: false },
     private: { type: "boolean", default: false },
@@ -129,6 +138,18 @@ async function readInput(path: string): Promise<string> {
   return Buffer.concat(chunks).toString("utf8");
 }
 
+const IMAGE_TYPES: Record<string, string> = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif" };
+
+/** `--ref` takes a local image (sent inline, up to 5 MB) or a memecub meme id. */
+async function referenceArg(ref: string): Promise<{ ref?: string; ref_image?: string }> {
+  const info = await stat(ref).catch(() => undefined);
+  if (!info?.isFile()) return { ref };
+  const type = IMAGE_TYPES[extname(ref).toLowerCase()];
+  if (!type) throw new Error("--ref image must be PNG, JPEG, WebP or GIF");
+  if (info.size > 5 * 1024 * 1024) throw new Error("--ref image must be 5 MB or smaller");
+  return { ref_image: `data:${type};base64,${(await readFile(ref)).toString("base64")}` };
+}
+
 async function main() {
   if (values.help || !cmd) return void process.stdout.write(HELP);
 
@@ -195,6 +216,25 @@ async function main() {
           : `${s.meme.title}${s.meme.license.commercial_use ? "" : " (not cleared for commercial use)"}${s.placed ? "" : " [not inserted: sentence not found]"}`;
         console.error(`• ${s.emotion}: ${pick} — “${s.anchor.slice(0, 60)}”`);
       }
+      return;
+    }
+    case "generate": {
+      const caption = rest.join(" ").trim();
+      if (!caption && !values.action) throw new Error("generate needs a caption or --action");
+      if (!client.apiKey) throw new Error("generate needs an account: run `memecub login` first");
+      const ref = values.ref ? await referenceArg(values.ref) : {};
+      const locale = values.locale === "en" || values.locale === "zh" ? values.locale : undefined;
+      console.error("Drawing… (usually 10–30 seconds)");
+      const r = await client.generate({ caption: caption || undefined, action: values.action, style: values.style, locale, ...ref });
+      if (values.out) {
+        const img = await fetch(r.data.meme.url);
+        if (!img.ok) throw new Error(`could not download the image (HTTP ${img.status})`);
+        await writeFile(values.out, Buffer.from(await img.arrayBuffer()));
+      }
+      if (values.json) return void console.log(JSON.stringify(r.data, null, 2));
+      console.log(`${r.data.meme.id}  ${r.data.meme.title}  (${r.data.style}, saved to your private library)\n  ${r.data.meme.url}`);
+      if (values.out) console.log(`  saved to ${values.out}`);
+      if (client.creditsRemaining !== undefined) console.error(`${client.creditsRemaining.toLocaleString("en-US")} credits left.`);
       return;
     }
     case "categories": {

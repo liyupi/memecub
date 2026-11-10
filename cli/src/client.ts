@@ -31,12 +31,23 @@ export interface SearchParams {
   minSize?: number;
 }
 
+export interface GenerateParams {
+  caption?: string;
+  action?: string;
+  style?: string;
+  /** A memecub meme id to reuse the character of. */
+  ref?: string;
+  /** Or a reference image as a data: URL. */
+  ref_image?: string;
+  locale?: "en" | "zh";
+}
+
 export interface Account {
   email: string;
   name: string;
   plan: string;
   credits: { remaining: number; monthly_remaining: number; monthly_allowance: number; purchased: number; resets_at: string };
-  costs: { search: number; match: number; match_unit?: "article" | "image"; match_per_image_from?: string };
+  costs: { search: number; match: number; match_unit?: "article" | "image"; match_per_image_from?: string; generate?: number };
   rate_limit_per_minute: number;
   private_library_limit: number;
   subscription: { status: string; interval: string; cancel_at_period_end: boolean } | null;
@@ -114,6 +125,10 @@ export class MemecubClient {
         profanity: opts.profanity ?? false,
       }),
     });
+  }
+
+  generate(body: GenerateParams) {
+    return this.request<{ data: { meme: Meme; style: string } }>("/api/v1/generate", { method: "POST", body: JSON.stringify(body) });
   }
 
   categories() {

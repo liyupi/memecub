@@ -1,6 +1,6 @@
 ---
 name: memecub
-description: Find memes, 表情包 / 斗图 and reaction images and place them into articles, newsletters, docs or video scripts. Use when the user asks to add memes / 表情包 / reaction images to a piece of writing, to "配图" with memes, or to find a meme for a feeling, reaction or character (熊猫头, 奶龙, Drake, This Is Fine…). Searches the memecub library over HTTP with curl; every result says whether it is cleared for commercial use.
+description: Find memes, 表情包 / 斗图 and reaction images and place them into articles, newsletters, docs or video scripts, or draw a custom meme with AI when none fits. Use when the user asks to add memes / 表情包 / reaction images to a piece of writing, to "配图" with memes, to find a meme for a feeling, reaction or character (熊猫头, 奶龙, Drake, This Is Fine…), or to make / generate a meme (做表情包). Searches the memecub library over HTTP with curl; every result says whether it is cleared for commercial use.
 ---
 
 # memecub: memes for writing
@@ -66,6 +66,24 @@ The response has `data.markdown` (the article with memes inserted) and `data.slo
 ## Finding a single meme
 
 For "find me a meme for X": search 2–3 phrasings, show the top 3–5 as Markdown images with whether each is cleared for commercial use, and let the user choose.
+
+## Making a custom meme with AI
+
+When nothing in the library fits after 2–3 searches, or the user explicitly asks for a meme of their own (their mascot, a specific joke, an English version of a Chinese meme), memecub can draw one. It needs `MEMECUB_API_KEY`, costs 500 credits per image (refunded if generation fails or is refused) and takes 10–30 seconds, so search first and confirm with the user before generating more than one.
+
+```bash
+curl -s -X POST https://memecub.com/api/v1/generate \
+  -H "Authorization: Bearer $MEMECUB_API_KEY" -H "Content-Type: application/json" \
+  -d '{"caption": "Works on my machine", "action": "a cat in a hoodie shrugging at a burning server", "style": "3d"}'
+```
+
+- `caption`: the words drawn on the meme, up to 30 characters, in the article's language. `action`: what the picture shows, up to 200 characters. At least one is required.
+- `style` (optional): `panda` (熊猫头 face meme), `photo`, `3d`, `anime`, `sticker`; left out, memecub picks one.
+- `ref` (optional): an `id` from a search result, to make a new version of that meme's character with a different caption or pose.
+- The response is `{"data": {"meme": {id, url, markdown, …}, "style"}}`; the image is saved to the user's private library and carries a visible "AI generated" label. Use `data.meme.markdown` like a search result.
+- It refuses recognizable real people, sexual, violent or political content (HTTP 422, nothing charged). Tell the user the reason; don't rephrase to get around it.
+
+With the MCP server use the `generate_meme` tool; with the CLI, `npx memecub generate "<caption>" --action "…" [--ref <id or image file>] --out meme.jpg`.
 
 ## Rules
 
