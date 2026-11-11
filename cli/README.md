@@ -13,7 +13,7 @@ memecub generate "Works on my machine" --action "a cat shrugging at a burning se
 memecub generate "收到" --ref ./mascot.png --style 3d   # reuse a character from a local image or a meme id
 ```
 
-Memes whose captions contain swearing are hidden unless you pass `--profanity`. `generate` draws a new meme with AI (needs an account) and saves it to your private library with a visible "AI generated" label; styles are `panda`, `photo`, `3d`, `anime` and `sticker`.
+Memes whose captions contain swearing are hidden unless you pass `--profanity`. `generate` draws a new meme with AI (needs an account) and saves it to your private library (the file's metadata marks it as AI-generated); styles are `panda`, `photo`, `3d`, `anime` and `sticker`.
 
 Run `npx memecub login` to sign in through the browser (the key is saved to `~/.config/memecub/config.json`), or set `MEMECUB_API_KEY` (create one at https://memecub.com/dashboard?tab=keys). Without signing in you get 20 searches a day; a free account gets 1,000 credits a month (search 1, match 20 per image placed, generate 500 per image). `memecub whoami` shows what is left; plans at https://memecub.com/pricing.
 

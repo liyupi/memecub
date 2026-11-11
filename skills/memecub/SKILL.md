@@ -80,7 +80,7 @@ curl -s -X POST https://memecub.com/api/v1/generate \
 - `caption`: the words drawn on the meme, up to 30 characters, in the article's language. `action`: what the picture shows, up to 200 characters. At least one is required.
 - `style` (optional): `panda` (熊猫头 face meme), `photo`, `3d`, `anime`, `sticker`; left out, memecub picks one.
 - `ref` (optional): an `id` from a search result, to make a new version of that meme's character with a different caption or pose.
-- The response is `{"data": {"meme": {id, url, markdown, …}, "style"}}`; the image is saved to the user's private library and carries a visible "AI generated" label. Use `data.meme.markdown` like a search result.
+- The response is `{"data": {"meme": {id, url, markdown, …}, "style"}}`; the image is saved to the user's private library and its file metadata marks it as AI-generated (no visible label). Use `data.meme.markdown` like a search result.
 - It refuses recognizable real people, sexual, violent or political content (HTTP 422, nothing charged). Tell the user the reason; don't rephrase to get around it.
 
 With the MCP server use the `generate_meme` tool; with the CLI, `npx memecub generate "<caption>" --action "…" [--ref <id or image file>] --out meme.jpg`.
